@@ -1,9 +1,10 @@
+// lib/screens/jackets_page.dart
 import 'package:flutter/material.dart';
-import 'package:shopping_app/components/navbar.dart';
+import 'package:shopping_app/components/item_container.dart';
+import 'package:shopping_app/components/list.dart';
 import 'package:shopping_app/database/database_handler.dart';
 import 'package:shopping_app/screens/product_details.dart';
-import 'package:shopping_app/shared_pref.dart';
-import '../components/list.dart';
+import 'package:shopping_app/login/shared_pref.dart';
 
 class JacketsPage extends StatefulWidget {
   JacketsPage({Key? key}) : super(key: key);
@@ -19,9 +20,10 @@ class _JacketsPageState extends State<JacketsPage> {
   Widget build(BuildContext context) {
     DataBaseHandler db = DataBaseHandler();
     int? id = sharedPref.id;
+
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.blue,
+        backgroundColor: Color(0xffDB3022),
         title: Text('Jackets Page'),
       ),
       body: SingleChildScrollView(
@@ -38,9 +40,12 @@ class _JacketsPageState extends State<JacketsPage> {
                   crossAxisCount: 2,
                   physics: NeverScrollableScrollPhysics(),
                   children: List.generate(jackets.length, (index) {
-                    return GestureDetector(
+                    return ItemContainer(
+                      name: jackets[index]["name"],
+                      imagePath: jackets[index]["image"],
+                      price: "${jackets[index]["price"]} EGP",
+                      isDarkMode: isDarkMode,
                       onTap: () {
-                        // Navigate to details page here
                         Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -50,48 +55,11 @@ class _JacketsPageState extends State<JacketsPage> {
                               imagePath: jackets[index]["image"],
                               price: "${jackets[index]["price"]} EGP",
                               userId: id!,
-                              productId: jackets[index]["id"], // Ensure you pass the product ID
+                              productId: jackets[index]["id"],
                             ),
                           ),
                         );
                       },
-                      child: Container(
-                        width: 200,
-                        color: isDarkMode ? Colors.grey[800] : Colors.white,
-                        margin: EdgeInsets.only(top: 10, left: 5),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            ClipRRect(
-                              child: Image.asset(
-                                jackets[index]["image"],
-                                width: MediaQuery.of(context).size.width,
-                                height: 250,
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                            SizedBox(height: 10),
-                            Text(
-                              jackets[index]["name"],
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 16,
-                                color: isDarkMode ? Colors.white : Colors.black,
-                              ),
-                            ),
-                            SizedBox(height: 5),
-                            Text(
-                              "${jackets[index]["price"]} EGP",
-                              style: TextStyle(
-                                color: Colors.red,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 18,
-                              ),
-                            ),
-                            SizedBox(height: 10),
-                          ],
-                        ),
-                      ),
                     );
                   }),
                 ),
@@ -103,48 +71,3 @@ class _JacketsPageState extends State<JacketsPage> {
     );
   }
 }
-
-
-
-List<Map<String, dynamic>> jackets = [
-  {
-    "id": 3,
-    "typeID": 1,
-    "name": "Jacket",
-    "desc": "Black jacket for mens with zipper details",
-    "price": 1250,
-    "image": "assets/images/jacket1.jpg",
-  },
-  {
-    "id": 6,
-    "typeID": 1,
-    "name": "Jacket",
-    "desc": "Denim jacket with distressed look",
-    "price": 1150,
-    "image": "assets/images/jacket2.jpg",
-  },
-  {
-    "id": 17,
-    "typeID": 1,
-    "name": "Jacket",
-    "desc": "Hooded jacket",
-    "price": 1280,
-    "image": "assets/images/jacket3.jpg",
-  },
-  {
-    "id": 25,
-    "typeID": 1,
-    "name": "Jacket",
-    "desc": "Puffer jacket",
-    "price": 1200,
-    "image": "assets/images/jacket4.jpg",
-  },
-  {
-    "id": 27,
-    "typeID": 1,
-    "name": "Jacket",
-    "desc": "Bomber jacket",
-    "price": 1200,
-    "image": "assets/images/jacket5.jpeg",
-  },
-];

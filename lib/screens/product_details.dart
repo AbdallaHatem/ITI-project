@@ -44,7 +44,8 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("تفاصيل المنتج"),
+        backgroundColor: Color(0xffDB3022),
+        title: Text( "Product Details"),
       ),
       body: SingleChildScrollView(
         child: Column(

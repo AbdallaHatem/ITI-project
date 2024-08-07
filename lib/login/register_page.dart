@@ -2,21 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:shopping_app/database/database_handler.dart';
 import 'package:shopping_app/database/tables_classes.dart';
-import 'package:sqflite/sqflite.dart';
 import 'login_page.dart';
-
-void main() {
-  runApp(MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: RegisterPage(),
-    );
-  }
-}
 
 class RegisterPage extends StatefulWidget {
   @override
@@ -44,14 +30,13 @@ class _RegisterPageState extends State<RegisterPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
-              // Image.asset(
-              //   'assets/illustration.png', // Replace this
-              //   height: 200.0,
-              // ),
               SizedBox(height: 20.0),
               Text(
-                'Please Register to Continue',
-                style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
+                'SIGN UP',
+                style: TextStyle(
+                    fontSize: 30.0,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xffDB3022)),
               ),
               SizedBox(height: 20.0),
               TextFormField(
@@ -81,8 +66,12 @@ class _RegisterPageState extends State<RegisterPage> {
                   ),
                 ),
                 validator: (value) {
-                  if (value?.isEmpty ?? true && EmailValidator.validate(value!)) {
+                  if (value == null || value.isEmpty) {
                     return 'Please enter your email';
+                  } else if (!EmailValidator.validate(value)) {
+                    return 'Please enter a valid email';
+                  } else if (!value.endsWith('@gmail.com')) {
+                    return 'Email must end with @gmail.com';
                   }
                   return null;
                 },
@@ -99,8 +88,10 @@ class _RegisterPageState extends State<RegisterPage> {
                 ),
                 obscureText: true,
                 validator: (value) {
-                  if (value?.isEmpty ?? true) {
+                  if (value == null || value.isEmpty) {
                     return 'Please enter your password';
+                  } else if (value.length < 8) {
+                    return 'Password must be at least 8 characters long';
                   }
                   return null;
                 },
@@ -117,7 +108,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 ),
                 obscureText: true,
                 validator: (value) {
-                  if (value?.isEmpty ?? true) {
+                  if (value == null || value.isEmpty) {
                     return 'Please confirm your password';
                   } else if (value != _passwordController.text) {
                     return 'Passwords do not match';
@@ -132,22 +123,22 @@ class _RegisterPageState extends State<RegisterPage> {
                     String name = _nameController.text;
                     String mail = _emailController.text;
                     String pass = _passwordController.text;
-                    DataBaseHandler db = new DataBaseHandler();
-                    user u = new user(id: null , name: name , mail: mail , pass: pass);
-                    if(await db.getUserByMail(mail) == null){
-                      db.insertUser(u);
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => LoginPage()),
-                        );
+                    DataBaseHandler db = DataBaseHandler();
+                    user u = user(id: null, name: name, mail: mail, pass: pass);
+                    if (await db.getUserByMail(mail) == null) {
+                      await db.insertUser(u);
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(builder: (context) => LoginPage()),
+                      );
+                    } else {
+                      // Handle user already exists
                     }
-                    else return;
                   }
                 },
-                child: Text('Register'),
+                child: Text('SIGN UP', style: TextStyle(color: Colors.white)),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blue,
+                  backgroundColor: Color(0xffDB3022),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10.0),
                   ),
@@ -161,16 +152,14 @@ class _RegisterPageState extends State<RegisterPage> {
                   SizedBox(width: 5.0),
                   TextButton(
                     onPressed: () {
-                      // Handle login navigation
                       Navigator.push(
                         context,
-                        MaterialPageRoute(
-                            builder: (context) => LoginPage()),
+                        MaterialPageRoute(builder: (context) => LoginPage()),
                       );
                     },
                     child: Text(
                       'Login',
-                      style: TextStyle(color: Colors.blue),
+                      style: TextStyle(color: Color(0xffDB3022)),
                     ),
                   ),
                 ],

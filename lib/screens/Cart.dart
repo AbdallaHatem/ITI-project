@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shopping_app/database/database_handler.dart';
+import 'package:shopping_app/login/shared_pref.dart';
 import 'package:shopping_app/screens/product_details.dart';
-import 'package:shopping_app/shared_pref.dart';
 import '../database/tables_classes.dart';
 
 class Cart extends StatefulWidget {
@@ -46,7 +46,7 @@ class _CartState extends State<Cart> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Your Cart')),
+      appBar: AppBar(title: Text('Your Cart'),backgroundColor: const Color(0xffDB3022),),
       body: Container(
         padding: EdgeInsets.all(10),
         child: Column(

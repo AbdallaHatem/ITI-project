@@ -20,7 +20,6 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
         setState(() {
           _currentIndex = index;
         });
-        // Navigate to corresponding screen based on the tapped index
         switch (index) {
           case 0:
             Navigator.push(context, MaterialPageRoute(builder: (context) => HomeScreen()));            break;
@@ -28,11 +27,9 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
             Navigator.push(context, MaterialPageRoute(builder: (context) => Cart()));            break;
           case 2:
             Navigator.push(context, MaterialPageRoute(builder: (context) => ProfilePage()));             break;
-        //  case 3:
-        //    Navigator.push(context, MaterialPageRoute(builder: (context) => ProfilePage()));            break;
-        }
+                }
       },
-      selectedItemColor: Colors.black, // Change the color of the selected item
+      selectedItemColor: Colors.black, 
       items: [
         BottomNavigationBarItem(
           icon: Icon(Icons.home, color: Colors.blue),
@@ -46,10 +43,6 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
           icon: Icon(Icons.person, color: Colors.blue),
           label: 'Profile',
         ),
-         // BottomNavigationBarItem(
-         //   icon: Icon(Icons.person, color: Colors.blue),
-         //   label: 'Profile',
-         // ),
       ],
     );
   }

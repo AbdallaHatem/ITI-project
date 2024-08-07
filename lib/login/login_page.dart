@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shopping_app/database/database_handler.dart';
 import 'package:shopping_app/database/tables_classes.dart';
 import 'package:shopping_app/screens/HomeScreen.dart';
-import 'package:shopping_app/shared_pref.dart';
-
+import 'package:shopping_app/login/shared_pref.dart';
 import 'register_page.dart';
 
 void main() {
@@ -91,32 +90,34 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                 ),
-
                 SizedBox(height: 20.0),
-                ElevatedButton(
-                  onPressed: () async {
-                    if (_formKey.currentState!.validate()) {
-                      // Handle login button press after validation
-                      DataBaseHandler db = new DataBaseHandler();
-                      user? u = await db.getUserByMail(_email);
-                      if(u == null || u.pass != _password){
-                        setState(() {
-                          ErrorMsg =  "Invalid Mail or Password";
-                        });
-                        return;
-                      }    
-                      sharedPref.loginUser(u.id!); 
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => HomeScreen()),
-                      ); 
-                    }       
-                  },
-                  child: Text('Login'),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blue,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10.0),
+                SizedBox(
+                  width: 250,
+                  child: ElevatedButton(
+                    onPressed: () async {
+                      if (_formKey.currentState!.validate()) {
+                        // Handle login button press after validation
+                        DataBaseHandler db = DataBaseHandler();
+                        user? u = await db.getUserByMail(_email);
+                        if (u == null || u.pass != _password) {
+                          setState(() {
+                            ErrorMsg = "Invalid Mail or Password";
+                          });
+                          return;
+                        }
+                        await sharedPref.loginUser(u.id!);
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(builder: (context) => HomeScreen()),
+                        );
+                      }
+                    },
+                    child: Text('LOGIN', style: TextStyle(color: Colors.white)),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xffDB3022),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
                     ),
                   ),
                 ),
@@ -127,27 +128,27 @@ class _LoginPageState extends State<LoginPage> {
                     Text('Don\'t have an account?'),
                     SizedBox(width: 10.0),
                     TextButton(
-                      // Use TextButton for clickable text
                       onPressed: () {
-                        // Navigate to the register page
                         Navigator.push(
                           context,
                           MaterialPageRoute(builder: (context) => RegisterPage()),
-                        ); // Assuming you have a register page with route name '/register'
+                        );
                       },
                       child: Text(
                         'Register',
-                        style: TextStyle(color: Colors.blue),
+                        style: TextStyle(color: Color(0xffDB3022)),
                       ),
                     ),
-                    
                   ],
                 ),
                 SizedBox(height: 20.0),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    Text('$ErrorMsg', style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),),
+                    Text(
+                      '$ErrorMsg',
+                      style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
+                    ),
                     SizedBox(width: 20.0),
                   ],
                 ),
@@ -159,4 +160,3 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 }
-
